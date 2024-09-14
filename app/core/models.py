@@ -10,6 +10,8 @@ def employee_image_file_path(instance, filename):
     filename = f'{uuid.uuid4()}{ext}'
 
     return os.path.join('uploads', 'employee', filename)
+
+
 class Employee(models.Model):
     """Model of an Employee."""
     first_name = models.CharField(max_length=100)

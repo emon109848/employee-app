@@ -4,3 +4,4 @@ flake8
 psycopg2>=2.8.6,<2.9
 drf-spectacular
 pillow
+django-filter

@@ -25,6 +25,7 @@ def image_upload_url(employee_id):
     """Create and return a image upload url."""
     return reverse('employee:employee-upload-image', args=[employee_id])
 
+
 def create_employee(**params):
     """Create and return a sample Employee"""
     defaults = {
@@ -64,6 +65,121 @@ class EmployeeAPITests(TestCase):
             self.assertEqual(res.data[i]['email'], employee_data['email'])
             self.assertEqual(res.data[i]['mobile'], employee_data['mobile'])
 
+    def test_filter_by_date(self):
+        """Test filtering employee by DOB"""
+        employee1 = create_employee(
+            first_name='Employee',
+            last_name='One',
+            email='employee.one@example.com',
+            mobile='1234567890',
+            date_of_birth=datetime.date(1990, 1, 1),
+        )
+        employee2 = create_employee(
+            first_name='Employee',
+            last_name='Two',
+            email='employee.two@example.com',
+            mobile='0987654321',
+            date_of_birth=datetime.date(1992, 2, 2),
+        )
+
+        params = {'date_of_birth': '1990-01-01'}
+        res = self.client.get(EMPLOYEES_URL, params)
+
+        serializer1 = EmployeeSerializer(employee1)
+        serializer2 = EmployeeSerializer(employee2)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        self.assertIn(serializer1.data, res.data)
+        self.assertNotIn(serializer2.data, res.data)
+
+    def test_filter_by_name(self):
+        """Test filtering employee by partial first or last name"""
+        employee1 = create_employee(
+            first_name='John',
+            last_name='Doe',
+            email='john.doe@example.com',
+            mobile='1234567890',
+            date_of_birth=datetime.date(1990, 1, 1),
+        )
+        employee2 = create_employee(
+            first_name='Jane',
+            last_name='Smith',
+            email='jane.smith@example.com',
+            mobile='0987654321',
+            date_of_birth=datetime.date(1992, 2, 2),
+        )
+
+        params = {'first_name': 'John'}
+        res = self.client.get(EMPLOYEES_URL, params)
+
+        serializer1 = EmployeeSerializer(employee1)
+        serializer2 = EmployeeSerializer(employee2)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn(serializer1.data, res.data)
+        self.assertNotIn(serializer2.data, res.data)
+
+        params = {'last_name': 'Doe'}
+        res = self.client.get(EMPLOYEES_URL, params)
+
+        self.assertIn(serializer1.data, res.data)
+        self.assertNotIn(serializer2.data, res.data)
+
+    def test_filter_by_email(self):
+        """Test filtering employee by partial email"""
+        employee1 = create_employee(
+            first_name='John',
+            last_name='Doe',
+            email='john.doe@example.com',
+            mobile='1234567890',
+            date_of_birth=datetime.date(1990, 1, 1),
+        )
+        employee2 = create_employee(
+            first_name='Jane',
+            last_name='Smith',
+            email='jane.smith@example.com',
+            mobile='0987654321',
+            date_of_birth=datetime.date(1992, 2, 2),
+        )
+
+        params = {'email': 'john.doe'}
+        res = self.client.get(EMPLOYEES_URL, params)
+
+        serializer1 = EmployeeSerializer(employee1)
+        serializer2 = EmployeeSerializer(employee2)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn(serializer1.data, res.data)
+        self.assertNotIn(serializer2.data, res.data)
+
+    def test_filter_by_mobile(self):
+        """Test filtering employee by partial mobile"""
+        employee1 = create_employee(
+            first_name='John',
+            last_name='Doe',
+            email='john.doe@example.com',
+            mobile='1234567890',
+            date_of_birth=datetime.date(1990, 1, 1),
+        )
+        employee2 = create_employee(
+            first_name='Jane',
+            last_name='Smith',
+            email='jane.smith@example.com',
+            mobile='0987654321',
+            date_of_birth=datetime.date(1992, 2, 2),
+        )
+
+        params = {'mobile': '1234'}
+        res = self.client.get(EMPLOYEES_URL, params)
+
+        serializer1 = EmployeeSerializer(employee1)
+        serializer2 = EmployeeSerializer(employee2)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn(serializer1.data, res.data)
+        self.assertNotIn(serializer2.data, res.data)
+
 
 class ImageUploadTests(TestCase):
     """Test for image upload API."""
@@ -79,7 +195,7 @@ class ImageUploadTests(TestCase):
         """Test uploading an image to an employee."""
         url = image_upload_url(self.employee.id)
         with tempfile.NamedTemporaryFile(suffix='.jpg') as image_file:
-            img = Image.new('RGB', (10,10))
+            img = Image.new('RGB', (10, 10))
             img.save(image_file, format='JPEG')
             image_file.seek(0)
             payload = {'photo': image_file}
