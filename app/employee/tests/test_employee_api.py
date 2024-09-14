@@ -11,6 +11,8 @@ from core.models import Employee
 
 from employee.serializers import EmployeeSerializer
 
+import datetime
+
 
 EMPLOYEES_URL = reverse('employee:employee-list')
 
@@ -21,7 +23,8 @@ def create_employee(**params):
         'first_name': 'SH',
         'last_name': 'Emon',
         'email': 'emon109848@gmail.com',
-        'mobile': '01674758661'
+        'mobile': '01674758661',
+        'date_of_birth': datetime.date(1990, 1, 1),
     }
     defaults.update(params)
 

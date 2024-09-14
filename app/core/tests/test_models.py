@@ -5,6 +5,8 @@ from django.test import TestCase
 
 from core import models
 
+import datetime
+
 
 class ModelTests(TestCase):
     """Test models."""
@@ -15,6 +17,7 @@ class ModelTests(TestCase):
             first_name="SH",
             last_name="Emon",
             email="emon109848@gmail.com",
+            date_of_birth=datetime.date(1998, 1, 1)
         )
 
         self.assertEqual(str(employee), employee.email)
