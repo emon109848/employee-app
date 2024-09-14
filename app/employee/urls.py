@@ -1,7 +1,7 @@
 """
 URL mappings for the employee app
 """
-from django.urls import(
+from django.urls import (
     path,
     include,
 )

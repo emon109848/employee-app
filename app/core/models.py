@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Employee(models.Model):
     """Model of an Employee."""
     first_name = models.CharField(max_length=100)
@@ -12,5 +13,3 @@ class Employee(models.Model):
     def __str__(self) -> str:
 
         return self.email
-
-

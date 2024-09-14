@@ -5,6 +5,7 @@ from rest_framework import serializers
 
 from core.models import Employee
 
+
 class EmployeeSerializer(serializers.ModelSerializer):
     """Serializer for employee."""
 

@@ -46,7 +46,9 @@ class EmployeeAPITests(TestCase):
         serializer = EmployeeSerializer(employees, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         for i, employee_data in enumerate(serializer.data):
-            self.assertEqual(res.data[i]['first_name'], employee_data['first_name'])
-            self.assertEqual(res.data[i]['last_name'], employee_data['last_name'])
+            self.assertEqual(res.data[i]['first_name'],
+                             employee_data['first_name'])
+            self.assertEqual(res.data[i]['last_name'],
+                             employee_data['last_name'])
             self.assertEqual(res.data[i]['email'], employee_data['email'])
             self.assertEqual(res.data[i]['mobile'], employee_data['mobile'])
