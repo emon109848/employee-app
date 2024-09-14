@@ -3,3 +3,4 @@ djangorestframework>=3.15.2,<3.16
 flake8
 psycopg2>=2.8.6,<2.9
 drf-spectacular
+pillow

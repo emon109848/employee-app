@@ -11,7 +11,7 @@ from rest_framework.routers import DefaultRouter
 from employee import views
 
 router = DefaultRouter()
-router.register('employee', views.EmployeeViewset)
+router.register('employee', views.EmployeeViewSet)
 
 app_name = 'employee'
 
